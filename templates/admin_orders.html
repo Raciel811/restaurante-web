@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Gestión de Órdenes</h2>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Fecha</th>
+                    <th>Total</th>
+                    <th>Estado</th>
+                    <th>Tipo</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td>{{ order.id }}</td>
+                    <td>{{ order.date.strftime('%d/%m/%Y %H:%M') }}</td>
+                    <td>${{ "%.2f"|format(order.total) }}</td>
+                    <td>
+                        <span class="badge 
+                            {% if order.status == 'Entregado' %}bg-success
+                            {% elif order.status == 'Cancelado' %}bg-danger
+                            {% elif order.status in ['En preparación', 'Listo'] %}bg-warning text-dark
+                            {% else %}bg-secondary{% endif %}">
+                            {{ order.status }}
+                        </span>
+                    </td>
+                    <td>{{ 'Domicilio' if order.is_delivery else 'Local' }}</td>
+                    <td>
+                        <a href="{{ url_for('update_order_status', order_id=order.id) }}"
+                           class="btn btn-sm btn-primary">Cambiar estado</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

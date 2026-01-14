@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Título principal -->
+    <div class="text-center mb-5">
+        <h1 class="display-6 fw-semibold text-dark">Dashboard Administrativo</h1>
+        <p class="text-muted">Vista general y control en tiempo real</p>
+    </div>
+
+    <div class="row g-4 justify-content-center">
+        <!-- Reporte Diario -->
+        <div class="col-md-6 col-lg-5">
+            <div class="card border-0 shadow-sm rounded-3 h-100">
+                <div class="card-header bg-dark text-white text-center py-3">
+                    <h5 class="mb-0 fw-medium">Reporte Diario</h5>
+                </div>
+                <div class="card-body text-center py-5">
+                    <div class="mb-4">
+                        <div class="small text-muted mb-1">Ventas</div>
+                        <h4 class="fw-bold text-success">${{ daily.sales|round(2) }}</h4>
+                    </div>
+                    <div class="mb-4">
+                        <div class="small text-muted mb-1">Gastos</div>
+                        <h4 class="fw-bold text-danger">${{ daily.expenses|round(2) }}</h4>
+                    </div>
+                    <div>
+                        <div class="small text-muted mb-1">Ganancia</div>
+                        <h4 class="fw-bold text-primary">${{ daily.profit|round(2) }}</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reporte Mensual -->
+        <div class="col-md-6 col-lg-5">
+            <div class="card border-0 shadow-sm rounded-3 h-100">
+                <div class="card-header bg-secondary text-white text-center py-3">
+                    <h5 class="mb-0 fw-medium">Reporte Mensual</h5>
+                </div>
+                <div class="card-body text-center py-5">
+                    <div class="mb-4">
+                        <div class="small text-muted mb-1">Ventas</div>
+                        <h4 class="fw-bold text-success">${{ monthly.sales|round(2) }}</h4>
+                    </div>
+                    <div class="mb-4">
+                        <div class="small text-muted mb-1">Gastos</div>
+                        <h4 class="fw-bold text-danger">${{ monthly.expenses|round(2) }}</h4>
+                    </div>
+                    <div>
+                        <div class="small text-muted mb-1">Ganancia</div>
+                        <h4 class="fw-bold text-primary">${{ monthly.profit|round(2) }}</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botones de acciones - más pequeños, elegantes y profesionales -->
+    <div class="d-flex flex-wrap justify-content-center gap-3 mt-5">
+        <a href="{{ url_for('admin_menu') }}" 
+           class="btn btn-outline-primary btn-md px-4 py-2 rounded-pill shadow-sm">
+            Gestionar Menú
+        </a>
+        <a href="{{ url_for('admin_orders') }}" 
+           class="btn btn-outline-warning btn-md px-4 py-2 rounded-pill shadow-sm">
+            Gestionar Órdenes
+        </a>
+        <a href="{{ url_for('admin_accounting') }}" 
+           class="btn btn-outline-info btn-md px-4 py-2 rounded-pill shadow-sm">
+            Contabilidad
+        </a>
+        <a href="{{ url_for('admin_site_config') }}" 
+           class="btn btn-warning btn-md px-4 py-2 rounded-pill shadow-sm fw-medium text-dark border-dark">
+            Cambiar Imagen de Fondo
+        </a>
+    </div>
+</div>
+{% endblock %}

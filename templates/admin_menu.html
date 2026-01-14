@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Gestión de Menú</h2>
+
+    <!-- Formulario -->
+    <div class="card mb-5">
+        <div class="card-header bg-primary text-white">
+            <h5>
+                {% if edit_id %}Editar producto{% else %}Nuevo producto{% endif %}
+            </h5>
+        </div>
+        <div class="card-body">
+            <form method="POST" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+                <!-- todos los campos del formulario como antes -->
+                <div class="mb-3">{{ form.name.label }} {{ form.name(class="form-control") }}</div>
+                <div class="mb-3">{{ form.description.label }} {{ form.description(class="form-control", rows=3) }}</div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">{{ form.price.label }} {{ form.price(class="form-control") }}</div>
+                    <div class="col-md-6 mb-3">{{ form.category.label }} {{ form.category(class="form-select") }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">{{ form.stock.label }} {{ form.stock(class="form-control") }}</div>
+                    <div class="col-md-6 mb-3">
+                        {{ form.image.label }}
+                        <input type="file" name="image" class="form-control" accept="image/*">
+                        {% if edit_id and item_to_edit.image %}
+                        <small>Actual:</small><br><img src="{{ item_to_edit.image }}" style="max-height:100px;">
+                        {% endif %}
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success">
+                    {% if edit_id %}Actualizar{% else %}Crear{% endif %}
+                </button>
+                {% if edit_id %}
+                <a href="{{ url_for('admin_menu') }}" class="btn btn-secondary">Cancelar</a>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+
+    <!-- Lista de productos -->
+    <h3>Productos ({{ items|length }})</h3>
+    {% if items %}
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Imagen</th>
+                    <th>Nombre</th>
+                    <th>Precio</th>
+                    <th>Categoría</th>
+                    <th>Stock</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td>
+                        {% if item.image %}
+                        <img src="{{ item.image }}" style="max-height:60px;">
+                        {% else %}—{% endif %}
+                    </td>
+                    <td>{{ item.name }}</td>
+                    <td>${{ "%.2f"|format(item.price) }}</td>
+                    <td>{{ item.category }}</td>
+                    <td>{{ item.stock }}</td>
+                    <td>
+                        {% if item.is_active %}
+                        <span class="badge bg-success">Activo</span>
+                        {% else %}
+                        <span class="badge bg-secondary">Oculto</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ url_for('admin_menu', edit=item.id) }}" class="btn btn-sm btn-primary">Editar</a>
+                        
+                        {% if item.is_active %}
+                        <form action="{{ url_for('deactivate_menu_item', item_id=item.id) }}" method="POST" style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-warning"
+                                    onclick="return confirm('¿Ocultar {{ item.name }} del menú público?');">
+                                Ocultar
+                            </button>
+                        </form>
+                        {% else %}
+                        <form action="{{ url_for('reactivate_menu_item', item_id=item.id) }}" method="POST" style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-success">
+                                Mostrar
+                            </button>
+                        </form>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info">No hay productos registrados</div>
+    {% endif %}
+</div>
+{% endblock %}

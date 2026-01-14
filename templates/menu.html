@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Menú</h2>
+<div class="row">
+    {% for item in items %}
+    <div class="col-md-4 mb-3">
+        <div class="card">
+            {% if item.image %}
+            <img src="{{ item.image }}" class="card-img-top" alt="{{ item.name }}">
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ item.name }} ({{ item.category }})</h5>
+                <p class="card-text">{{ item.description }}</p>
+                <p class="card-text">Precio: ${{ item.price }}</p>
+                <form action="{{ url_for('add_to_cart', item_id=item.id) }}" method="post">
+                    <button type="submit" class="btn btn-success">Agregar al Carrito</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

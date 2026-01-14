@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Contabilidad</h2>
+<form method="post">
+    {{ form.hidden_tag() }}
+    <div class="form-group">{{ form.description.label }} {{ form.description(class="form-control") }}</div>
+    <div class="form-group">{{ form.amount.label }} {{ form.amount(class="form-control") }}</div>
+    {{ form.submit(class="btn btn-primary") }}
+</form>
+<h3>Gastos Registrados</h3>
+<table class="table">
+    <thead><tr><th>Descripción</th><th>Monto</th><th>Fecha</th></tr></thead>
+    <tbody>
+        {% for exp in expenses %}
+        <tr><td>{{ exp.description }}</td><td>${{ exp.amount }}</td><td>{{ exp.date }}</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

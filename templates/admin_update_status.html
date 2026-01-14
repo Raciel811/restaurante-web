@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Actualizar Estado - Orden #{{ order.id }}</h2>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5>Información de la orden</h5>
+        </div>
+        <div class="card-body">
+            <p><strong>Fecha:</strong> {{ order.date.strftime('%d/%m/%Y %H:%M') }}</p>
+            <p><strong>Total:</strong> ${{ "%.2f"|format(order.total) }}</p>
+            <p><strong>Tipo:</strong> {{ 'Domicilio' if order.is_delivery else 'Local' }}</p>
+            <p><strong>Dirección:</strong> {{ order.delivery_address or '—' }}</p>
+            <p><strong>Estado actual:</strong> 
+                <span class="badge bg-info fs-6">{{ order.status }}</span>
+            </p>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <form method="POST">
+                <div class="mb-4">
+                    <label for="status" class="form-label fw-bold">Nuevo estado</label>
+                    <select name="status" id="status" class="form-select form-select-lg" required>
+                        <option value="Pendiente" {% if order.status == 'Pendiente' %}selected{% endif %}>Pendiente</option>
+                        <option value="En preparación" {% if order.status == 'En preparación' %}selected{% endif %}>En preparación</option>
+                        <option value="Listo" {% if order.status == 'Listo' %}selected{% endif %}>Listo para entrega</option>
+                        <option value="Entregado" {% if order.status == 'Entregado' %}selected{% endif %}>Entregado</option>
+                        <option value="Cancelado" {% if order.status == 'Cancelado' %}selected{% endif %}>Cancelado</option>
+                    </select>
+                </div>
+
+                <div class="d-flex gap-3">
+                    <button type="submit" class="btn btn-success btn-lg">Actualizar estado</button>
+                    <a href="{{ url_for('admin_orders') }}" class="btn btn-secondary btn-lg">Volver al listado</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
