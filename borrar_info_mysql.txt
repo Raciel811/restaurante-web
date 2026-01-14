@@ -1,0 +1,9 @@
+-- Borra los ítems de órdenes (tabla hija)
+DELETE FROM order_item;
+
+-- Borra las órdenes principales
+DELETE FROM `order`;
+
+-- Opcional: resetear el contador de ID para que vuelva a 1
+ALTER TABLE `order` AUTO_INCREMENT = 1;
+ALTER TABLE order_item AUTO_INCREMENT = 1;
